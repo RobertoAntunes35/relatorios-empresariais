@@ -9,9 +9,53 @@ import numpy as np
 import datetime
 import os
 import sys 
+import copy
 
+from config import vendedores, path, FILE_CLIENTES, FILE_PEDIDO_ITENS
 
-from config import vendedores, path,FILE_CLIENTES, FILE_PEDIDO_ITENS
+class Clientes(foo.Excel):
+    def __init__(self, nome_arquivo: str, listaVendedores: list, **columns_select) -> None:
+        super().__init__(nome_arquivo, **columns_select)
+        self.__matrizDados = self.filter_frame()
+        self._listaVendedores = listaVendedores
+        self._vendedores = {}
+        if not isinstance(self._listaVendedores, list):
+            raise TypeError("Atribua uma lista de códigos dos vendedores.")
+        for codVendedor in self._listaVendedores:
+            if codVendedor not in vendedores.values():
+                raise ValueError("O código %s não está na lista de vendedores cadastrados." % codVendedor)
+            for nome, codigo in vendedores.items():
+                if codigo == codVendedor:
+                    self._vendedores[nome] = codigo
+
+    @property
+    def matrizDados(self):
+        return self.__matrizDados
+    
+    @property
+    def listaVendedores(self):
+        return self._listaVendedores
+    
+    @listaVendedores.setter
+    def listaVendedores(self, newValue: int):
+        if newValue not in vendedores.values():
+            raise ValueError("O valor a ser incluso, não é um vendedor cadastrado.")
+        self._listaVendedores.append(newValue)
+    
+    def clientesEmCadastro(self, codigoVendedor: list) -> pd.DataFrame:
+        dados = copy.deepcopy(self.__matrizDados)
+        valorFiltro = {}
+        for codigo in codigoVendedor:
+            if codigo not in self._listaVendedores:
+                raise ValueError("O vendedor %s solicitado para analise, não foi passado como parâmetro." % codigo)
+        for chave_vendedor, valor_vendedor in vendedores.items():
+            for codVendedor in codigoVendedor:
+                if valor_vendedor == codVendedor:
+                    dataFrame = dados.loc[dados['nome_vendedor'] == chave_vendedor, ['codigo_cliente', 'nome_fantasia', 'cidade', 'dia_visita', 'nome_vendedor']]
+                    valorFiltro[chave_vendedor] = dataFrame                    
+                    break
+        return pd.concat(valorFiltro.values())
+
 
 
 class AnaliseGeralVendedores(foo.Excel):
@@ -19,7 +63,7 @@ class AnaliseGeralVendedores(foo.Excel):
     def __init__(self, nome_arquivo: str, codigosVendedor: list, inicio_mes_analise: str, **columns_select) -> None:
         super().__init__(nome_arquivo, **columns_select)
         self._codigoVendedor = codigosVendedor
-        self._matrizDados = self.filterFrame()
+        self.__matrizDados = self.filter_frame()
 
         try:
             data = datetime.datetime.strptime(inicio_mes_analise, "%Y-%m-%d")
@@ -68,10 +112,9 @@ class AnaliseGeralVendedores(foo.Excel):
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
     
-
-
-
-
+    def positivacaoClientePorVendedor(self, clientesVendedor: pd.DataFrame) -> int:
+        pass 
+    
 
 if __name__ == '__main__':
     # Primeiro Arquivo
@@ -89,9 +132,32 @@ if __name__ == '__main__':
         'Data_Importacao':'data_importacao'
     }
 
+    # Segundo Arquivo
+    file_clientes = os.path.join(path, FILE_CLIENTES)
+    rename_file_clientes = {
+        'D01_Cod_Cliente':'codigo_cliente',
+        'D01_Nome':'razao_social',
+        'Fantasia':'nome_fantasia',
+        'D01_Cidade':'cidade',
+        'xregiao':'dia_visita',
+        'D01_Vendedor':'nome_vendedor',
+        'Latitude':'latitude',
+        'Longitude':'longitude',
+        'xDesconto_Condicional':'desconto_condicional',  
+    }
+
+
+    Cliente = Clientes(
+        nome_arquivo=file_clientes,
+        listaVendedores=[10,11,12,13,15,16],
+        **rename_file_clientes
+    )
+    print(Cliente.clientesEmCadastro([11,10,12,13,15,16]))
+
     Relatorio = AnaliseGeralVendedores(
         nome_arquivo=file_pedido_itens,
         codigosVendedor=[10,11],
         inicio_mes_analise="2022-10-05",
         **rename_file_pedidoItens
     )
+
