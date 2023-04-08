@@ -26,9 +26,9 @@ file_perfect = [
         "mesAnalise":"Janeiro",    
         "positivacao":[
             {
-                "ClientesEmCadastro":150,
-                "PositivacaoTotal":75,
-                "PorcentagemPositivacao":0.5,
+                "ClientesEmCadastro":150,# Ok
+                "PositivacaoTotal":75, # Ok
+                "PorcentagemPositivacao":0.5, # Ok
                 "rankingMaioresCidade":[
                     {
                         "Primeira":50,
