@@ -61,7 +61,6 @@ class Clientes(foo.Excel):
     def __str__(self) -> str:
         return f'DATA FRAME DE CLIENTES: \n {self.valuesDataFrame}'
 
-
 class AnaliseGeralVendedores(foo.Excel):
     
     def __init__(self, nome_arquivo: str, codigosVendedor: list, inicio_mes_analise: str, **columns_select) -> None:
@@ -130,7 +129,7 @@ class AnaliseGeralVendedores(foo.Excel):
                             listaDados[chave] = dados
         return listaDados
 
-    def positivacaoClientePorVendedor(self, clientesVendedor: pd.DataFrame) -> int:
+    def positivacaoClientePorVendedor(self, clientesVendedor: pd.DataFrame) -> dict:
         df_positivacao = {}
         dados_matriz = copy.deepcopy(self.__matrizDados)
         dados = clientesVendedor
@@ -141,9 +140,8 @@ class AnaliseGeralVendedores(foo.Excel):
             clientes_em_cadastro = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['nome_fantasia']))
             porcentagem_positivacao = (len(positivacao) / len(clientes_em_cadastro))            
             df_positivacao[nome_vendedor] = (len(clientes_em_cadastro), len(positivacao), round(porcentagem_positivacao, 3))
+        return df_positivacao
 
-        for i, j in df_positivacao.items():
-            print(i,j)
 
 if __name__ == '__main__':
     
@@ -185,9 +183,9 @@ if __name__ == '__main__':
 
     Relatorio = AnaliseGeralVendedores(
         nome_arquivo=file_pedido_itens,
-        codigosVendedor=[10,11,12],
+        codigosVendedor=[10,11,12,13,15,16,21],
         inicio_mes_analise="2022-10-05",
         **rename_file_pedidoItens
     )
-    Relatorio.positivacaoClientePorVendedor(clientes)
+    print(Relatorio.positivacaoClientePorVendedor(clientes))
 
