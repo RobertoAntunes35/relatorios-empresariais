@@ -61,6 +61,7 @@ class Clientes(foo.Excel):
     def __str__(self) -> str:
         return f'DATA FRAME DE CLIENTES: \n {self.valuesDataFrame}'
 
+
 class AnaliseGeralVendedores(foo.Excel):
     
     def __init__(self, nome_arquivo: str, codigosVendedor: list, inicio_mes_analise: str, **columns_select) -> None:
@@ -92,8 +93,6 @@ class AnaliseGeralVendedores(foo.Excel):
     def finalMes(self, inicioMes):
         return datetime.date(inicioMes.year, inicioMes.month + 1, 1) - datetime.timedelta(days=1)
 
-
-    # Setters / Getters
     @property
     def codigoVendedor(self):
         return self._codigoVendedor
@@ -117,35 +116,35 @@ class AnaliseGeralVendedores(foo.Excel):
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
     
-
-    # Functions
     def retornoDadosVendedores(self, listaInformacao):
-        listaDados = {}
+        listaDados = []
         if isinstance(listaInformacao, (list)):
             for chave, valor in vendedores.items():
                 if isinstance(listaInformacao[0], str):
                     for dados in listaInformacao:
                         if dados == chave:
-                            listaDados[dados] = valor
+                            listaDados.append(valor) 
                 if isinstance(listaInformacao[0], int):
                     for dados in listaInformacao:
                         if dados == valor:
-                            listaDados[chave] = dados
+                            listaDados.append(chave)
         return listaDados
 
-    def positivacaoClientePorVendedor(self, clientesVendedor: pd.DataFrame) -> dict:
+    def positivacaoClientePorVendedor(self, clientesVendedor: pd.DataFrame) -> int:
         df_positivacao = {}
+        analise_dados = {}
         dados_matriz = copy.deepcopy(self.__matrizDados)
         dados = clientesVendedor
-        dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
-        
-        for nome_vendedor, codigo_vendedor in dados_vendedores.items():
-            positivacao = set(np.array(dados_matriz.loc[dados_matriz['codigo_vendedor'] == codigo_vendedor]['nome_fantasia']))
-            clientes_em_cadastro = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['nome_fantasia']))
-            porcentagem_positivacao = (len(positivacao) / len(clientes_em_cadastro))            
-            df_positivacao[nome_vendedor] = (len(clientes_em_cadastro), len(positivacao), round(porcentagem_positivacao, 3))
-        return df_positivacao
+        info = set(np.array(dados.loc[dados['nome_vendedor'] == 'DALMO LEVI GOMES NOGUEIRA']['nome_fantasia']))
+        print(len(info))
+        vendedores_selecionados = list(set(np.array(dados['nome_vendedor'])))
+        codigos_vendedores_selecionados = self.retornoDadosVendedores(vendedores_selecionados)
+        for vendedor, nome_vendedor in zip(codigos_vendedores_selecionados, vendedores_selecionados):
+            df_positivacao[nome_vendedor] = \
+                (len(set(np.array(dados_matriz.loc[dados_matriz['codigo_vendedor'] == vendedor]['nome_fantasia']))),
+                len(set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['nome_fantasia']))))
 
+        print((df_positivacao['DALMO LEVI GOMES NOGUEIRA']))
 
 if __name__ == '__main__':
     
@@ -180,16 +179,16 @@ if __name__ == '__main__':
 
     Cliente = Clientes(
         nome_arquivo=file_clientes,
-        listaVendedores=[10,11,12,13,15,16,21],
+        listaVendedores=[10,11,12,13,15,16],
         **rename_file_clientes
     )
-    clientes = Cliente.clientesEmCadastro([11,10,12,13,15,16,21])
+    clientes = Cliente.clientesEmCadastro([11,10,12,13,15,16])
 
     Relatorio = AnaliseGeralVendedores(
         nome_arquivo=file_pedido_itens,
-        codigosVendedor=[10,11,12,13,15,16,21],
+        codigosVendedor=[10,11],
         inicio_mes_analise="2022-10-05",
         **rename_file_pedidoItens
     )
-    print(Relatorio.positivacaoClientePorVendedor(clientes))
+    Relatorio.positivacaoClientePorVendedor(clientes)
 

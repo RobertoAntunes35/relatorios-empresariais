@@ -92,8 +92,6 @@ class AnaliseGeralVendedores(foo.Excel):
     def finalMes(self, inicioMes):
         return datetime.date(inicioMes.year, inicioMes.month + 1, 1) - datetime.timedelta(days=1)
 
-
-    # Setters / Getters
     @property
     def codigoVendedor(self):
         return self._codigoVendedor
@@ -117,8 +115,6 @@ class AnaliseGeralVendedores(foo.Excel):
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
     
-
-    # Functions
     def retornoDadosVendedores(self, listaInformacao):
         listaDados = {}
         if isinstance(listaInformacao, (list)):

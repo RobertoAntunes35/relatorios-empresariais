@@ -61,6 +61,7 @@ class Clientes(foo.Excel):
     def __str__(self) -> str:
         return f'DATA FRAME DE CLIENTES: \n {self.valuesDataFrame}'
 
+
 class AnaliseGeralVendedores(foo.Excel):
     
     def __init__(self, nome_arquivo: str, codigosVendedor: list, inicio_mes_analise: str, **columns_select) -> None:
@@ -92,8 +93,6 @@ class AnaliseGeralVendedores(foo.Excel):
     def finalMes(self, inicioMes):
         return datetime.date(inicioMes.year, inicioMes.month + 1, 1) - datetime.timedelta(days=1)
 
-
-    # Setters / Getters
     @property
     def codigoVendedor(self):
         return self._codigoVendedor
@@ -117,8 +116,6 @@ class AnaliseGeralVendedores(foo.Excel):
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
     
-
-    # Functions
     def retornoDadosVendedores(self, listaInformacao):
         listaDados = {}
         if isinstance(listaInformacao, (list)):

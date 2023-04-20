@@ -1,0 +1,16 @@
+# Variáveis de ambiente
+.env
+
+# Arquivos
+Arquivos_Excel/
+Arquivos_PDF/
+Fiscal/
+Geral/
+nova_pasta/
+power_bi/
+static/
+Vendedores/
+venv/
+fornecedores.py
+
+
