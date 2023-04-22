@@ -139,6 +139,8 @@ class AnaliseGeralVendedores(foo.Excel):
         dados = clientesVendedor
         dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
         
+
+
         def clientesporDiaVisita():
             return 'teste'
         
@@ -150,7 +152,13 @@ class AnaliseGeralVendedores(foo.Excel):
                 df_positivacao[nome_vendedor] = (len(clientes_em_cadastro), len(positivacao), round(porcentagem_positivacao, 3))
             return df_positivacao
 
-        return positivacaoGeral(), clientesporDiaVisita()
+        return positivacaoGeral()
+
+    def clientesPorDiaDeVisita(self, clientesVendedor: pd.DataFrame) -> dict:
+        df_positivacao = {}
+        dados_matriz = copy.deepcopy(self.__matrizDados)
+        dados = clientesVendedor
+        dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
 
 if __name__ == '__main__':
     
@@ -196,6 +204,5 @@ if __name__ == '__main__':
         inicio_mes_analise="2022-10-05",
         **rename_file_pedidoItens
     )
-
-    a, b = Relatorio.positivacaoCliente(clientes)
+    print(Relatorio.positivacaoCliente(clientes))
 

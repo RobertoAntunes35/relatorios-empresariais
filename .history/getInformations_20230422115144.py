@@ -198,4 +198,6 @@ if __name__ == '__main__':
     )
 
     a, b = Relatorio.positivacaoCliente(clientes)
+    print(a)
+    print(b)
 

@@ -133,24 +133,30 @@ class AnaliseGeralVendedores(foo.Excel):
                             listaDados[chave] = dados
         return listaDados
 
-    def positivacaoCliente(self, clientesVendedor: pd.DataFrame) -> dict:
+    def positivacaoClientePorVendedor(self, clientesVendedor: pd.DataFrame) -> dict:
         df_positivacao = {}
         dados_matriz = copy.deepcopy(self.__matrizDados)
         dados = clientesVendedor
         dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
         
-        def clientesporDiaVisita():
+
+        def clientesporDiaVisita(self):
             return 'teste'
         
-        def positivacaoGeral():        
-            for nome_vendedor, codigo_vendedor in dados_vendedores.items():
-                positivacao = set(np.array(dados_matriz.loc[dados_matriz['codigo_vendedor'] == codigo_vendedor]['nome_fantasia']))
-                clientes_em_cadastro = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['nome_fantasia']))
-                porcentagem_positivacao = (len(positivacao) / len(clientes_em_cadastro))            
-                df_positivacao[nome_vendedor] = (len(clientes_em_cadastro), len(positivacao), round(porcentagem_positivacao, 3))
-            return df_positivacao
+        for nome_vendedor, codigo_vendedor in dados_vendedores.items():
+            positivacao = set(np.array(dados_matriz.loc[dados_matriz['codigo_vendedor'] == codigo_vendedor]['nome_fantasia']))
+            clientes_em_cadastro = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['nome_fantasia']))
+            porcentagem_positivacao = (len(positivacao) / len(clientes_em_cadastro))            
+            df_positivacao[nome_vendedor] = (len(clientes_em_cadastro), len(positivacao), round(porcentagem_positivacao, 3))
+        
+        return df_positivacao
 
-        return positivacaoGeral(), clientesporDiaVisita()
+
+    def clientesPorDiaDeVisita(self, clientesVendedor: pd.DataFrame) -> dict:
+        df_positivacao = {}
+        dados_matriz = copy.deepcopy(self.__matrizDados)
+        dados = clientesVendedor
+        dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
 
 if __name__ == '__main__':
     
@@ -196,6 +202,5 @@ if __name__ == '__main__':
         inicio_mes_analise="2022-10-05",
         **rename_file_pedidoItens
     )
-
-    a, b = Relatorio.positivacaoCliente(clientes)
+    print(Relatorio.positivacaoClientePorVendedor(clientes))
 
