@@ -8,7 +8,6 @@ from getInformations import Clientes, AnaliseGeralVendedores, file_clientes, fil
 
 if __name__ == '__main__':
     load_dotenv()
-
     Cliente = Clientes(
             nome_arquivo=file_clientes,
             listaVendedores=[10,11,12,13,15,16,21],

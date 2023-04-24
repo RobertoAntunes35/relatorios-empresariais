@@ -3,11 +3,9 @@ import os
 
 from getInformations import Clientes, AnaliseGeralVendedores, file_clientes, file_pedido_itens, rename_file_clientes, rename_file_pedidoItens
 
-
-
-
 if __name__ == '__main__':
     load_dotenv()
+
 
     Cliente = Clientes(
             nome_arquivo=file_clientes,
