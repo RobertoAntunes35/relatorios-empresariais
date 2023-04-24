@@ -230,6 +230,6 @@ if __name__ == '__main__':
         **rename_file_pedidoItens)
     
     (a,c),b = Relatorio.positivacaoCliente(clientes, '2023-04-01', '2023-04-30')
-    print(a[16])
+    print(a[11])
     
 

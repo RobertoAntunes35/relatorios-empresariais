@@ -138,12 +138,19 @@ class AnaliseGeralVendedores(foo.Excel):
         dados = clientesVendedor
         dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
         self.datas = arg
+        print(self.datas)
+
+        clientes_vendedor = set(np.array(dados_matriz[
+                        (dados_matriz['data_importacao'] >= self.datas[0]) & 
+                        (dados_matriz['data_importacao'] <= self.datas[1])]
+                        ['nome_fantasia']
+                        ))
         
         def clientesporDiaVisita():
             vendedor_final = {}
+            clientes_dia_nao_positivados = []
             if self.datas:
                 for nome_vendedor, codigo_vendedor in dados_vendedores.items():
-                    clientes_dia_nao_positivados = []
                     clientes_dia = {}
                     dias_de_visita = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['dia_visita']))
                     clientes_vendedor = set(np.array(dados_matriz[
@@ -165,12 +172,12 @@ class AnaliseGeralVendedores(foo.Excel):
                             (dados['nome_vendedor'] == nome_vendedor)]
                             ['nome_fantasia']))
                         
-                        for i in clientes_dia_visita:
-                            if i not in clientes_vendedor:
+                        for i in clientes_vendedor:
+                            if i not in clientes_dia_visita:
                                 clientes_dia_nao_positivados.append(i)
                             else:
                                 contagem +=1
-                        clientes_dia[dia] = (quantidade_clientes_por_dia_visita, contagem, round(contagem/quantidade_clientes_por_dia_visita, 3), clientes_dia_nao_positivados)
+                        clientes_dia[dia] = (quantidade_clientes_por_dia_visita, contagem, round(contagem/quantidade_clientes_por_dia_visita, 3))
                     vendedor_final[codigo_vendedor] = clientes_dia
 
             return vendedor_final, clientes_dia_nao_positivados
@@ -179,10 +186,13 @@ class AnaliseGeralVendedores(foo.Excel):
             df_positivacao = {}
             for nome_vendedor, codigo_vendedor in dados_vendedores.items():
                 positivacao = set(np.array(dados_matriz.loc[dados_matriz['codigo_vendedor'] == codigo_vendedor]['nome_fantasia']))
+                print(positivacao)
                 clientes_em_cadastro = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['nome_fantasia']))
-                porcentagem_positivacao = (len(positivacao) / len(clientes_em_cadastro))            
-                df_positivacao[nome_vendedor] = (len(clientes_em_cadastro), len(positivacao), round(porcentagem_positivacao, 3))
-            return df_positivacao
+                # porcentagem_positivacao = (len(positivacao) / len(clientes_em_cadastro))            
+                print(clientes_em_cadastro)
+            #     df_positivacao[nome_vendedor] = (len(clientes_em_cadastro), len(positivacao), round(porcentagem_positivacao, 3))
+            # return df_positivacao
+            pass 
         return clientesporDiaVisita(), positivacaoGeral()
 
 if __name__ == '__main__':
@@ -225,11 +235,11 @@ if __name__ == '__main__':
 
     Relatorio = AnaliseGeralVendedores(
         nome_arquivo=file_pedido_itens,
-        codigosVendedor=[10,11,12,13,15,16],
+        codigosVendedor=[10,11,12,13,15,16,21],
         inicio_mes_analise="2022-10-05",
-        **rename_file_pedidoItens)
-    
+        **rename_file_pedidoItens
+    )
     (a,c),b = Relatorio.positivacaoCliente(clientes, '2023-04-01', '2023-04-30')
-    print(a[16])
+    print(b)
     
 

@@ -8,18 +8,15 @@ df = pd.DataFrame({
 
 # Cria um dicionário vazio para armazenar os dados
 dicionario = {}
-df.
-df.iterrows()
 
 # Loop for aninhado para iterar sobre as linhas e colunas do dataframe
 for index, row in df.iterrows():
     # Cria um dicionário com os valores da linha atual do dataframe
     linha_dict = {}
-    print(type(row))
     for coluna, valor in row.items():
         linha_dict[coluna] = valor
     # Adiciona o dicionário da linha ao dicionário geral
     dicionario[index] = linha_dict
 
 # Imprime o dicionário resultante
-# print(dicionario)
+print(dicionario)

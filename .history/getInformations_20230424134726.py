@@ -141,9 +141,9 @@ class AnaliseGeralVendedores(foo.Excel):
         
         def clientesporDiaVisita():
             vendedor_final = {}
+            clientes_dia_nao_positivados = []
             if self.datas:
                 for nome_vendedor, codigo_vendedor in dados_vendedores.items():
-                    clientes_dia_nao_positivados = []
                     clientes_dia = {}
                     dias_de_visita = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['dia_visita']))
                     clientes_vendedor = set(np.array(dados_matriz[
@@ -165,8 +165,8 @@ class AnaliseGeralVendedores(foo.Excel):
                             (dados['nome_vendedor'] == nome_vendedor)]
                             ['nome_fantasia']))
                         
-                        for i in clientes_dia_visita:
-                            if i not in clientes_vendedor:
+                        for i in clientes_vendedor:
+                            if i not in clientes_dia_visita:
                                 clientes_dia_nao_positivados.append(i)
                             else:
                                 contagem +=1
@@ -230,6 +230,6 @@ if __name__ == '__main__':
         **rename_file_pedidoItens)
     
     (a,c),b = Relatorio.positivacaoCliente(clientes, '2023-04-01', '2023-04-30')
-    print(a[16])
+    print(a)
     
 

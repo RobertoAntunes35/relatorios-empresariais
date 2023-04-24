@@ -8,7 +8,7 @@ df = pd.DataFrame({
 
 # Cria um dicionário vazio para armazenar os dados
 dicionario = {}
-df.
+
 df.iterrows()
 
 # Loop for aninhado para iterar sobre as linhas e colunas do dataframe

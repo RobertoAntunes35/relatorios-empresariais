@@ -141,9 +141,9 @@ class AnaliseGeralVendedores(foo.Excel):
         
         def clientesporDiaVisita():
             vendedor_final = {}
+            clientes_dia_nao_positivados = []
             if self.datas:
                 for nome_vendedor, codigo_vendedor in dados_vendedores.items():
-                    clientes_dia_nao_positivados = []
                     clientes_dia = {}
                     dias_de_visita = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['dia_visita']))
                     clientes_vendedor = set(np.array(dados_matriz[
@@ -165,12 +165,12 @@ class AnaliseGeralVendedores(foo.Excel):
                             (dados['nome_vendedor'] == nome_vendedor)]
                             ['nome_fantasia']))
                         
-                        for i in clientes_dia_visita:
-                            if i not in clientes_vendedor:
+                        for i in clientes_vendedor:
+                            if i not in clientes_dia_visita:
                                 clientes_dia_nao_positivados.append(i)
                             else:
                                 contagem +=1
-                        clientes_dia[dia] = (quantidade_clientes_por_dia_visita, contagem, round(contagem/quantidade_clientes_por_dia_visita, 3), clientes_dia_nao_positivados)
+                        clientes_dia[dia] = (quantidade_clientes_por_dia_visita, contagem, round(contagem/quantidade_clientes_por_dia_visita, 3))
                     vendedor_final[codigo_vendedor] = clientes_dia
 
             return vendedor_final, clientes_dia_nao_positivados
@@ -230,6 +230,28 @@ if __name__ == '__main__':
         **rename_file_pedidoItens)
     
     (a,c),b = Relatorio.positivacaoCliente(clientes, '2023-04-01', '2023-04-30')
-    print(a[16])
+    import pandas as pd
+
+    # Cria um dataframe de exemplo
+    df = pd.DataFrame({
+        'id': [1, 2, 3],
+        'nome': ['João', 'Maria', 'Pedro'],
+        'idade': [25, 30, 35]
+    })
+
+    # Cria um dicionário vazio para armazenar os dados
+    dicionario = {}
+
+    # Loop for aninhado para iterar sobre as linhas e colunas do dataframe
+    for index, row in df.iterrows():
+        # Cria um dicionário com os valores da linha atual do dataframe
+        linha_dict = {}
+        for coluna, valor in row.items():
+            linha_dict[coluna] = valor
+        # Adiciona o dicionário da linha ao dicionário geral
+        dicionario[index] = linha_dict
+
+    # Imprime o dicionário resultante
+    print(dicionario)
     
 
