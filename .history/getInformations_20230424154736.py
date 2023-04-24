@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import os
+import sys 
 import copy
 
 from config import vendedores, path, FILE_CLIENTES, FILE_PEDIDO_ITENS
@@ -184,35 +185,36 @@ class AnaliseGeralVendedores(foo.Excel):
             return df_positivacao
         return clientesporDiaVisita(), positivacaoGeral()
 
-# Primeiro Arquivo
-file_pedido_itens = os.path.join(path, FILE_PEDIDO_ITENS)
-rename_file_pedidoItens = {
-    'Combinação47':'fornecedor',
-    'Texto66':'cidades',
-    'Texto28':'produtos',
-    'Combinação22':'codigo_vendedor',
-    'Vl_Prod':'valor_venda_produto',
-    'Texto14':'nome_fantasia',
-    'Texto45':'valor_custo_produto',
-    'Texto73':'valor_venda_fardo',
-    'QUANT':'quantidade',
-    'Data_Importacao':'data_importacao'
-}
-# Segundo Arquivo
-file_clientes = os.path.join(path, FILE_CLIENTES)
-rename_file_clientes = {
-    'D01_Cod_Cliente':'codigo_cliente',
-    'D01_Nome':'razao_social',
-    'Fantasia':'nome_fantasia',
-    'D01_Cidade':'cidade',
-    'xregiao':'dia_visita',
-    'D01_Vendedor':'nome_vendedor',
-    'Latitude':'latitude',
-    'Longitude':'longitude',
-    'xDesconto_Condicional':'desconto_condicional',  
-}
+if __name__ == '__main__':
     
+    # Primeiro Arquivo
+    file_pedido_itens = os.path.join(path, FILE_PEDIDO_ITENS)
+    rename_file_pedidoItens = {
+        'Combinação47':'fornecedor',
+        'Texto66':'cidades',
+        'Texto28':'produtos',
+        'Combinação22':'codigo_vendedor',
+        'Vl_Prod':'valor_venda_produto',
+        'Texto14':'nome_fantasia',
+        'Texto45':'valor_custo_produto',
+        'Texto73':'valor_venda_fardo',
+        'QUANT':'quantidade',
+        'Data_Importacao':'data_importacao'
+    }
 
+    # Segundo Arquivo
+    file_clientes = os.path.join(path, FILE_CLIENTES)
+    rename_file_clientes = {
+        'D01_Cod_Cliente':'codigo_cliente',
+        'D01_Nome':'razao_social',
+        'Fantasia':'nome_fantasia',
+        'D01_Cidade':'cidade',
+        'xregiao':'dia_visita',
+        'D01_Vendedor':'nome_vendedor',
+        'Latitude':'latitude',
+        'Longitude':'longitude',
+        'xDesconto_Condicional':'desconto_condicional',  
+    }
 
     
     

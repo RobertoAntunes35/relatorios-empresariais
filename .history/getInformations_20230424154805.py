@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import os
+import sys 
 import copy
 
 from config import vendedores, path, FILE_CLIENTES, FILE_PEDIDO_ITENS

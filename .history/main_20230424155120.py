@@ -1,3 +1,10 @@
+import pandas as np 
+import numpy as np 
+import os 
+import sys 
+import datetime
+import copy
+
 
 from getInformations import Clientes, AnaliseGeralVendedores, file_clientes, file_pedido_itens, rename_file_clientes, rename_file_pedidoItens
 
@@ -17,4 +24,4 @@ if __name__ == '__main__':
         **rename_file_pedidoItens)
     
     (a,c),b = Relatorio.positivacaoCliente(clientes, '2023-04-01', '2023-04-08')
-    print(b)
+    print(c)

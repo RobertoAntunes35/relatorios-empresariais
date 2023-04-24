@@ -90,6 +90,7 @@ file_perfect = [
     }
 ]
 
+
 file_diario = [
     {
     'Vendedor':'Nome Vendedor',

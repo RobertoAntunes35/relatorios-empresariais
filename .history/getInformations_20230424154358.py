@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import os
+import sys 
 import copy
 
 from config import vendedores, path, FILE_CLIENTES, FILE_PEDIDO_ITENS
@@ -184,36 +185,51 @@ class AnaliseGeralVendedores(foo.Excel):
             return df_positivacao
         return clientesporDiaVisita(), positivacaoGeral()
 
-# Primeiro Arquivo
-file_pedido_itens = os.path.join(path, FILE_PEDIDO_ITENS)
-rename_file_pedidoItens = {
-    'Combinação47':'fornecedor',
-    'Texto66':'cidades',
-    'Texto28':'produtos',
-    'Combinação22':'codigo_vendedor',
-    'Vl_Prod':'valor_venda_produto',
-    'Texto14':'nome_fantasia',
-    'Texto45':'valor_custo_produto',
-    'Texto73':'valor_venda_fardo',
-    'QUANT':'quantidade',
-    'Data_Importacao':'data_importacao'
-}
-# Segundo Arquivo
-file_clientes = os.path.join(path, FILE_CLIENTES)
-rename_file_clientes = {
-    'D01_Cod_Cliente':'codigo_cliente',
-    'D01_Nome':'razao_social',
-    'Fantasia':'nome_fantasia',
-    'D01_Cidade':'cidade',
-    'xregiao':'dia_visita',
-    'D01_Vendedor':'nome_vendedor',
-    'Latitude':'latitude',
-    'Longitude':'longitude',
-    'xDesconto_Condicional':'desconto_condicional',  
-}
+if __name__ == '__main__':
     
+    # Primeiro Arquivo
+    file_pedido_itens = os.path.join(path, FILE_PEDIDO_ITENS)
+    rename_file_pedidoItens = {
+        'Combinação47':'fornecedor',
+        'Texto66':'cidades',
+        'Texto28':'produtos',
+        'Combinação22':'codigo_vendedor',
+        'Vl_Prod':'valor_venda_produto',
+        'Texto14':'nome_fantasia',
+        'Texto45':'valor_custo_produto',
+        'Texto73':'valor_venda_fardo',
+        'QUANT':'quantidade',
+        'Data_Importacao':'data_importacao'
+    }
 
+    # Segundo Arquivo
+    file_clientes = os.path.join(path, FILE_CLIENTES)
+    rename_file_clientes = {
+        'D01_Cod_Cliente':'codigo_cliente',
+        'D01_Nome':'razao_social',
+        'Fantasia':'nome_fantasia',
+        'D01_Cidade':'cidade',
+        'xregiao':'dia_visita',
+        'D01_Vendedor':'nome_vendedor',
+        'Latitude':'latitude',
+        'Longitude':'longitude',
+        'xDesconto_Condicional':'desconto_condicional',  
+    }
 
+    Cliente = Clientes(
+        nome_arquivo=file_clientes,
+        listaVendedores=[10,11,12,13,15,16,21],
+        **rename_file_clientes
+    )
+    clientes = Cliente.clientesEmCadastro([11,10,12,13,15,16,21])
+
+    Relatorio = AnaliseGeralVendedores(
+        nome_arquivo=file_pedido_itens,
+        codigosVendedor=[10,11,12,13,15,16],
+        inicio_mes_analise="2022-10-05",
+        **rename_file_pedidoItens)
     
+    (a,c),b = Relatorio.positivacaoCliente(clientes, '2023-04-01', '2023-04-08')
+    print(a[16])
     
 

@@ -1,3 +1,10 @@
+import pandas as np 
+import numpy as np 
+import os 
+import sys 
+import datetime
+import copy
+
 
 from getInformations import Clientes, AnaliseGeralVendedores, file_clientes, file_pedido_itens, rename_file_clientes, rename_file_pedidoItens
 

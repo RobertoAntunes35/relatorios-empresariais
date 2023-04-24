@@ -90,6 +90,7 @@ file_perfect = [
     }
 ]
 
+
 file_diario = [
     {
     'Vendedor':'Nome Vendedor',
@@ -104,6 +105,17 @@ file_diario = [
             '0':(14,7,0.5, [])
             }
         ]
+    }
+]
+
+file_positivao_diaria = [
+    {
+    'vendedor':'Antonio Monis Junior',
+    'segunda-feira':(14, 7, 0.5, []),
+    'terca-feira':(14, 7, 0.5, []),
+    'quarta-feira':(14, 7, 0.5, []),
+    'quinta-feira':(14, 7, 0.5, []),
+    'sexta-feira':(14, 7, 0.5, [])
     }
 ]
        
