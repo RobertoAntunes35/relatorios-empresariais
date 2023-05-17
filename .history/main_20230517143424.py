@@ -30,10 +30,9 @@ if __name__ == '__main__':
         termino_da_semana = input(str('Digite a data de término da semana, sendo ela da seguinte forma: year-mont-day: \n'))
 
 
-        (a,_, c),b = Relatorio.positivacaoCliente(clientes, inicio_semana, termino_da_semana)
+        (a,_),b = Relatorio.positivacaoCliente(clientes, inicio_semana, termino_da_semana)
         for key, value in a.items():
             print(f'Vendedor: {key} Positivações: {value}')
-        # print(c)
 
         valor_termino = input('Digite 1 para sair do laço!')
         if valor_termino == '1':

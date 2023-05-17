@@ -178,10 +178,8 @@ class AnaliseGeralVendedores(foo.Excel):
                     vendedor_final[codigo_vendedor] = clientes_dia
 
                     self.data_frame_final = self.frameClientesNaoPositivados(listaClientesNaoPositivados=clientes_dia_nao_positivados, listaClientes=lista_frame_clientes_nao_positivados, frame=dados)
-                    
-                    # Criar função separada para geração de arquivo excel
-                    self.data_frame_final.reset_index().to_excel("Clientes_nao_positivados.xlsx")
-                    # 
+                    self.data_frame_final.to_excel("Clientes_nao_positivados")
+
 
             return vendedor_final, clientes_dia_nao_positivados, self.data_frame_final
         
@@ -201,7 +199,7 @@ class AnaliseGeralVendedores(foo.Excel):
 
     def frameClientesNaoPositivados(self, listaClientesNaoPositivados, listaClientes, frame):
         for i in listaClientesNaoPositivados:
-            listaClientes.append((frame.loc[frame['nome_fantasia'] == i, ['nome_vendedor', 'nome_fantasia', 'dia_visita', 'cidade']]).reset_index())
+            listaClientes.append(frame.loc[frame['nome_fantasia'] == i, ['nome_vendedor', 'nome_fantasia', 'dia_visita', 'cidade']])
         return pd.concat(listaClientes)
             
 

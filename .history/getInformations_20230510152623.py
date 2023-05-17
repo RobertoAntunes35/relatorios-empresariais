@@ -118,11 +118,7 @@ class AnaliseGeralVendedores(foo.Excel):
     
 
     # Functions
-    def retornoDadosVendedores(self, listaInformacao) -> dict:
-        '''Entrada de um dicionário, com as seguinte informações:
-            • Chave: Nome completo do vendedor.
-            • Valor: Código do vendedor.
-        '''
+    def retornoDadosVendedores(self, listaInformacao):
         listaDados = {}
         if isinstance(listaInformacao, (list)):
             for chave, valor in vendedores.items():
@@ -140,7 +136,6 @@ class AnaliseGeralVendedores(foo.Excel):
         dados_matriz = copy.deepcopy(self.__matrizDados)
         dados = clientesVendedor
         dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
-        lista_frame_clientes_nao_positivados = []
         self.datas = arg
         
         def clientesporDiaVisita():
@@ -150,15 +145,13 @@ class AnaliseGeralVendedores(foo.Excel):
                     clientes_dia_nao_positivados = []
                     clientes_dia = {}
                     dias_de_visita = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['dia_visita']))
-                    frameClientes = (dados_matriz[
+                    frameClientes = set(np.array(dados_matriz[
                         (dados_matriz['codigo_vendedor'] == codigo_vendedor) & 
                         (dados_matriz['data_importacao'] >= self.datas[0]) & 
-                        (dados_matriz['data_importacao'] <= self.datas[1])])
+                        (dados_matriz['data_importacao'] <= self.datas[1])]))
 
-                    clientes_vendedor = set(np.array(frameClientes['nome_fantasia']))
-                    
+                    clientes_vendedor = frameClientes['nome_fantasia']
                     self.positivacaoCidade(frameClientes)
-                    
                     for dia in dias_de_visita:
                         contagem = 0
                         frameDiaVisita = dados.loc[(dados['dia_visita'] == dia) & (dados['nome_vendedor'] == nome_vendedor)]
@@ -172,19 +165,10 @@ class AnaliseGeralVendedores(foo.Excel):
                                 clientes_dia_nao_positivados.append(i)
                             else:
                                 contagem +=1
-                    
-                        clientes_dia[dia] = (len(quantidade_clientes_por_dia_visita), contagem, round(contagem/len(quantidade_clientes_por_dia_visita), 3))
-                    
+                        clientes_dia[dia] = (quantidade_clientes_por_dia_visita,len(quantidade_clientes_por_dia_visita), contagem, round(contagem/len(quantidade_clientes_por_dia_visita), 3))
                     vendedor_final[codigo_vendedor] = clientes_dia
 
-                    self.data_frame_final = self.frameClientesNaoPositivados(listaClientesNaoPositivados=clientes_dia_nao_positivados, listaClientes=lista_frame_clientes_nao_positivados, frame=dados)
-                    
-                    # Criar função separada para geração de arquivo excel
-                    self.data_frame_final.reset_index().to_excel("Clientes_nao_positivados.xlsx")
-                    # 
-
-            return vendedor_final, clientes_dia_nao_positivados, self.data_frame_final
-        
+            return vendedor_final, clientes_dia_nao_positivados
 
         def positivacaoGeral():        
             df_positivacao = {}
@@ -197,19 +181,14 @@ class AnaliseGeralVendedores(foo.Excel):
         
         return clientesporDiaVisita(), positivacaoGeral()
     
-
-
-    def frameClientesNaoPositivados(self, listaClientesNaoPositivados, listaClientes, frame):
-        for i in listaClientesNaoPositivados:
-            listaClientes.append((frame.loc[frame['nome_fantasia'] == i, ['nome_vendedor', 'nome_fantasia', 'dia_visita', 'cidade']]).reset_index())
-        return pd.concat(listaClientes)
-            
-
     def positivacaoCidade(self, frameAnalise: pd.DataFrame) -> dict:
         cidadeDict = {}
         self.frameAnalise = frameAnalise
         for cidade in frameAnalise['cidades']:
-            cidadeDict[cidade] = frameAnalise.loc[frameAnalise['cidades'] == cidade]['cidades'].count()
+            cidadeDict[cidade] = frameAnalise.loc[frameAnalise['cidades'] == cidade]['cidade'].count()
+        print(cidadeDict)
+
+        
 
 
 
@@ -227,7 +206,6 @@ rename_file_pedidoItens = {
     'QUANT':'quantidade',
     'Data_Importacao':'data_importacao'
 }
-
 # Segundo Arquivo
 file_clientes = os.path.join(path, FILE_CLIENTES)
 rename_file_clientes = {

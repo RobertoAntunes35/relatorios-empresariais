@@ -208,7 +208,6 @@ if __name__ == '__main__':
         'D01_Vendedor':'vendedor',
         'Combinação47':'fornecedor'
     }
-
     
     relatorio_geral = RelatorioDestinado(arquivo_pedido_itens, analise_dados.get('fornecedores', []), **rename_file_pedidoItens)
     relatorio_geral.frameFiltradoPorDiaAnalise()
@@ -228,14 +227,15 @@ if __name__ == '__main__':
     relatorio_geral.transformarDataFrameEmExcel(terceira_condicao, "terceira_condicao_xereta.xlsx")
     relatorio_geral.transformarDataFrameEmExcel(relatorio_geral.frame_analise, "terceira_geral.xlsx")
     
+'''
     
-    # # for i in datas:
-    # #     faturamentoVendedor = relatorio_geral.faturamentoMensalVendedor(
-    # #     data_inicial=datas.get(i, 'Não Encontrado')[0],
-    # #     data_final=datas.get(i,'Não Encontrado')[1],
-    # #     vendedor=vendedores.get('antonio_monis','Não Encontrado')
-    # # )
-    #     print(f'Faturamento de {i}: {faturamentoVendedor:.2f}')
+    for i in datas:
+        faturamentoVendedor = relatorio_geral.faturamentoMensalVendedor(
+        data_inicial=datas.get(i, 'Não Encontrado')[0],
+        data_final=datas.get(i,'Não Encontrado')[1],
+        vendedor=vendedores.get('antonio_monis','Não Encontrado')
+    )
+        print(f'Faturamento de {i}: {faturamentoVendedor:.2f}')
 
 
 
@@ -260,5 +260,4 @@ if __name__ == '__main__':
 
     Clientes(arquivo_pedido_itens, **rename_file_qualimax).filtroClientes()
 
-    
-    
+    '''

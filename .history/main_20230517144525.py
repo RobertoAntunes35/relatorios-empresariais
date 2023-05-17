@@ -33,7 +33,7 @@ if __name__ == '__main__':
         (a,_, c),b = Relatorio.positivacaoCliente(clientes, inicio_semana, termino_da_semana)
         for key, value in a.items():
             print(f'Vendedor: {key} Positivações: {value}')
-        # print(c)
+        print(c)
 
         valor_termino = input('Digite 1 para sair do laço!')
         if valor_termino == '1':

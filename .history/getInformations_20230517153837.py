@@ -178,10 +178,8 @@ class AnaliseGeralVendedores(foo.Excel):
                     vendedor_final[codigo_vendedor] = clientes_dia
 
                     self.data_frame_final = self.frameClientesNaoPositivados(listaClientesNaoPositivados=clientes_dia_nao_positivados, listaClientes=lista_frame_clientes_nao_positivados, frame=dados)
-                    
-                    # Criar função separada para geração de arquivo excel
                     self.data_frame_final.reset_index().to_excel("Clientes_nao_positivados.xlsx")
-                    # 
+
 
             return vendedor_final, clientes_dia_nao_positivados, self.data_frame_final
         
