@@ -115,6 +115,7 @@ class AnaliseGeralVendedores(foo.Excel):
             self._finalMesAnalise = self.finalMes(data)
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
+    
 
     # Functions
     def retornoDadosVendedores(self, listaInformacao) -> dict:
@@ -136,9 +137,8 @@ class AnaliseGeralVendedores(foo.Excel):
         return listaDados
 
     def positivacaoCliente(self, clientesVendedor: pd.DataFrame, *arg) -> dict:
-        '''Especificar funcionamento'''
         dados_matriz = copy.deepcopy(self.__matrizDados)
-        dados = clientesVendedor
+        self.dados = clientesVendedor
         dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
         self.datas = arg
         
@@ -149,7 +149,7 @@ class AnaliseGeralVendedores(foo.Excel):
                     clientes_dia_nao_positivados = []
                     clientes_dia = {}
                     contagemGeral = 0
-                    dias_de_visita = set(np.array(dados.loc[dados['nome_vendedor'] == nome_vendedor]['dia_visita']))
+                    dias_de_visita = set(np.array(self.dados.loc[self.dados['nome_vendedor'] == nome_vendedor]['dia_visita']))
                     frameClientes = (dados_matriz[
                         (dados_matriz['codigo_vendedor'] == codigo_vendedor) & 
                         (dados_matriz['data_importacao'] >= self.datas[0]) & 
@@ -158,9 +158,30 @@ class AnaliseGeralVendedores(foo.Excel):
                     clientes_vendedor = set(np.array(frameClientes['nome_fantasia']))
                     
                     self.positivacaoCidade(frameClientes)
-                    clientes_dia, contagemGeral = self.diasVisita(dias_de_visita, dados, clientes_vendedor, nome_vendedor)
+                    
+
+                    # for dia in dias_de_visita:
+                    #     contagem = 0
+                    #     frameDiaVisita = set(np.array(self.dados.loc[(self.dados['dia_visita'] == dia) & (self.dados['nome_vendedor'] == nome_vendedor)]['nome_fantasia']))
+                        
+                    #     # quantidade_clientes_por_dia_visita = np.array(frameDiaVisita['nome_fantasia'])
+                    #     # clientes_dia_visita = set(np.array(dados.loc[
+                    #     #     (dados['dia_visita'] == dia) & 
+                    #     #     (dados['nome_vendedor'] == nome_vendedor)]
+                    #     #     ['nome_fantasia']))                        
+                        
+                    #     for i in frameDiaVisita:
+                    #         if i not in clientes_vendedor:
+                    #             clientes_dia_nao_positivados.append(i)
+                    #         else:
+                    #             contagem += 1 
+                    #             contagemGeral += 1 
+                        
+                    #     clientes_dia[dia] = (len(frameDiaVisita), contagem, round(contagem/len(frameDiaVisita), 3))
+                    clientes_dia, contagemGeral = self.diasVisita(dias_de_visita, self.dados, frameClientes, nome_vendedor)
                     vendedor_final[codigo_vendedor] = (clientes_dia, f'Positivação Total: {contagemGeral}')
             
+
             return vendedor_final, clientes_dia_nao_positivados
 
         def positivacaoGeral():        
@@ -175,44 +196,40 @@ class AnaliseGeralVendedores(foo.Excel):
         return clientesporDiaVisita(), positivacaoGeral()
 
     def diasVisita(self, diasVisita, framePedidos,frameClientes, vendedor):
-        '''Especificar funcionamento'''
         contagemGeral = 0
         listaNaoPositivados = []
         clientesDia = {}
-
+        
         for dia in diasVisita:
             contagem = 0
-            quantidadeClientesDiaVisita = set(np.array(framePedidos.loc[(framePedidos['dia_visita']== dia) & (framePedidos['nome_vendedor'] == vendedor)]['nome_fantasia']))
-            
+            quantidadeClientesDiaVisita = set(np.array(framePedidos.loc[(framePedidos['dia_visita']== dia) & framePedidos['nome_vendedor'] == vendedor]['nome_fantasia']))
             for i in quantidadeClientesDiaVisita:
                 if i not in frameClientes:
                     listaNaoPositivados.append(i)
                 else:
                     contagem += 1
                     contagemGeral += 1
-            clientesDia[dia] = (len(quantidadeClientesDiaVisita), contagem, round(contagem/len(quantidadeClientesDiaVisita),3))
+            clientesDia[dia] = (len(quantidadeClientesDiaVisita), contagem, round(contagem(len(quantidadeClientesDiaVisita)),3))
         
         return clientesDia, contagemGeral
                 
+
     def frameClientesNaoPositivados(self, listaClientesNaoPositivados, listaClientes, frame):
-        '''Especificar funcionamento'''
         for i in listaClientesNaoPositivados:
             listaClientes.append((frame.loc[frame['nome_fantasia'] == i, ['nome_vendedor', 'nome_fantasia', 'dia_visita', 'cidade']]))
         return pd.concat(listaClientes)
             
     def positivacaoCidade(self, frameAnalise: pd.DataFrame) -> dict:
-        '''Especificar funcionamento'''
         cidadeDict = {}
         self.frameAnalise = frameAnalise
         for cidade in frameAnalise['cidades']:
             cidadeDict[cidade] = frameAnalise.loc[frameAnalise['cidades'] == cidade]['cidades'].count()
 
     def convertToExcel(self, file, fileName: str):
-        '''Especificar funcionamento'''
-        try:
-            file.to_excel(fileName)
-        except:
-            raise TypeError("Error ao tentar converter para excel.")
+            try:
+                file.to_excel(fileName)
+            except:
+                raise TypeError("Error ao tentar converter para excel.")
 
 # Primeiro Arquivo
 file_pedido_itens = os.path.join(path, FILE_PEDIDO_ITENS)

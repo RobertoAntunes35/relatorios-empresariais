@@ -115,6 +115,7 @@ class AnaliseGeralVendedores(foo.Excel):
             self._finalMesAnalise = self.finalMes(data)
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
+    
 
     # Functions
     def retornoDadosVendedores(self, listaInformacao) -> dict:
@@ -136,7 +137,6 @@ class AnaliseGeralVendedores(foo.Excel):
         return listaDados
 
     def positivacaoCliente(self, clientesVendedor: pd.DataFrame, *arg) -> dict:
-        '''Especificar funcionamento'''
         dados_matriz = copy.deepcopy(self.__matrizDados)
         dados = clientesVendedor
         dados_vendedores = self.retornoDadosVendedores(self._codigoVendedor)
@@ -158,6 +158,24 @@ class AnaliseGeralVendedores(foo.Excel):
                     clientes_vendedor = set(np.array(frameClientes['nome_fantasia']))
                     
                     self.positivacaoCidade(frameClientes)
+                    # for dia in dias_de_visita:
+                    #     contagem = 0
+                    #     frameDiaVisita = set(np.array(self.dados.loc[(self.dados['dia_visita'] == dia) & (self.dados['nome_vendedor'] == nome_vendedor)]['nome_fantasia']))
+                        
+                    #     # quantidade_clientes_por_dia_visita = np.array(frameDiaVisita['nome_fantasia'])
+                    #     # clientes_dia_visita = set(np.array(dados.loc[
+                    #     #     (dados['dia_visita'] == dia) & 
+                    #     #     (dados['nome_vendedor'] == nome_vendedor)]
+                    #     #     ['nome_fantasia']))                        
+                        
+                    #     for i in frameDiaVisita:
+                    #         if i not in clientes_vendedor:
+                    #             clientes_dia_nao_positivados.append(i)
+                    #         else:
+                    #             contagem += 1 
+                    #             contagemGeral += 1 
+                        
+                    #     clientes_dia[dia] = (len(frameDiaVisita), contagem, round(contagem/len(frameDiaVisita), 3))
                     clientes_dia, contagemGeral = self.diasVisita(dias_de_visita, dados, clientes_vendedor, nome_vendedor)
                     vendedor_final[codigo_vendedor] = (clientes_dia, f'Positivação Total: {contagemGeral}')
             
@@ -175,7 +193,6 @@ class AnaliseGeralVendedores(foo.Excel):
         return clientesporDiaVisita(), positivacaoGeral()
 
     def diasVisita(self, diasVisita, framePedidos,frameClientes, vendedor):
-        '''Especificar funcionamento'''
         contagemGeral = 0
         listaNaoPositivados = []
         clientesDia = {}
@@ -190,29 +207,27 @@ class AnaliseGeralVendedores(foo.Excel):
                 else:
                     contagem += 1
                     contagemGeral += 1
-            clientesDia[dia] = (len(quantidadeClientesDiaVisita), contagem, round(contagem/len(quantidadeClientesDiaVisita),3))
+            clientesDia[dia] = (len(quantidadeClientesDiaVisita), contagem, round(contagem/len(quantidadeClientesDiaVisita),3)*100)
         
         return clientesDia, contagemGeral
                 
+
     def frameClientesNaoPositivados(self, listaClientesNaoPositivados, listaClientes, frame):
-        '''Especificar funcionamento'''
         for i in listaClientesNaoPositivados:
             listaClientes.append((frame.loc[frame['nome_fantasia'] == i, ['nome_vendedor', 'nome_fantasia', 'dia_visita', 'cidade']]))
         return pd.concat(listaClientes)
             
     def positivacaoCidade(self, frameAnalise: pd.DataFrame) -> dict:
-        '''Especificar funcionamento'''
         cidadeDict = {}
         self.frameAnalise = frameAnalise
         for cidade in frameAnalise['cidades']:
             cidadeDict[cidade] = frameAnalise.loc[frameAnalise['cidades'] == cidade]['cidades'].count()
 
     def convertToExcel(self, file, fileName: str):
-        '''Especificar funcionamento'''
-        try:
-            file.to_excel(fileName)
-        except:
-            raise TypeError("Error ao tentar converter para excel.")
+            try:
+                file.to_excel(fileName)
+            except:
+                raise TypeError("Error ao tentar converter para excel.")
 
 # Primeiro Arquivo
 file_pedido_itens = os.path.join(path, FILE_PEDIDO_ITENS)

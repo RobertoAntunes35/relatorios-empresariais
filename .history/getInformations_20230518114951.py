@@ -115,6 +115,7 @@ class AnaliseGeralVendedores(foo.Excel):
             self._finalMesAnalise = self.finalMes(data)
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
+    
 
     # Functions
     def retornoDadosVendedores(self, listaInformacao) -> dict:
@@ -194,6 +195,7 @@ class AnaliseGeralVendedores(foo.Excel):
         
         return clientesDia, contagemGeral
                 
+
     def frameClientesNaoPositivados(self, listaClientesNaoPositivados, listaClientes, frame):
         '''Especificar funcionamento'''
         for i in listaClientesNaoPositivados:

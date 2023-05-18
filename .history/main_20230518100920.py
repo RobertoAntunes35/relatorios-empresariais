@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
 
         (a,_),b = Relatorio.positivacaoCliente(clientes, inicio_semana, termino_da_semana)
-
+        listaFrame = []
         for key, value in a.items():
             print(f'Vendedor: {key} Positivações: {value}')
 

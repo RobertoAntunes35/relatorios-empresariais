@@ -115,6 +115,7 @@ class AnaliseGeralVendedores(foo.Excel):
             self._finalMesAnalise = self.finalMes(data)
         except:
             raise ValueError("Erro no valor atribuido ao mês.")
+    
 
     # Functions
     def retornoDadosVendedores(self, listaInformacao) -> dict:
@@ -194,6 +195,7 @@ class AnaliseGeralVendedores(foo.Excel):
         
         return clientesDia, contagemGeral
                 
+
     def frameClientesNaoPositivados(self, listaClientesNaoPositivados, listaClientes, frame):
         '''Especificar funcionamento'''
         for i in listaClientesNaoPositivados:
@@ -208,11 +210,10 @@ class AnaliseGeralVendedores(foo.Excel):
             cidadeDict[cidade] = frameAnalise.loc[frameAnalise['cidades'] == cidade]['cidades'].count()
 
     def convertToExcel(self, file, fileName: str):
-        '''Especificar funcionamento'''
-        try:
-            file.to_excel(fileName)
-        except:
-            raise TypeError("Error ao tentar converter para excel.")
+            try:
+                file.to_excel(fileName)
+            except:
+                raise TypeError("Error ao tentar converter para excel.")
 
 # Primeiro Arquivo
 file_pedido_itens = os.path.join(path, FILE_PEDIDO_ITENS)

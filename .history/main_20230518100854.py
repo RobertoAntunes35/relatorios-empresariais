@@ -31,9 +31,14 @@ if __name__ == '__main__':
 
 
         (a,_),b = Relatorio.positivacaoCliente(clientes, inicio_semana, termino_da_semana)
-
+        listaFrame = []
         for key, value in a.items():
+            listaFrame.append(pd.DataFrame(value))
             print(f'Vendedor: {key} Positivações: {value}')
+        # print(c)
+        frameFinal = pd.concat(listaFrame)
+
+        print(frameFinal)
 
         valor_termino = input('Digite 1 para sair do laço!')
         if valor_termino == '1':
